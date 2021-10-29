@@ -18,12 +18,13 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"os"
+	"strings"
+
 	"github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/tendermint/tmlibs/bech32"
-	"os"
-	"strings"
 )
 
 var cfgFile string
@@ -92,7 +93,10 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.address-converter.yaml)")
 
 	rootCmd.PersistentFlags().StringVar(&chainPrefix, "chain-prefix", "c", "The chain prefix, e.g. 'osmo' or 'sif'")
-	rootCmd.MarkFlagRequired("chain-prefix")
+	err := rootCmd.MarkFlagRequired("chain-prefix")
+	if err != nil {
+		fmt.Println(err)
+	}
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
