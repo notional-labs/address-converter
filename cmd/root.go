@@ -16,19 +16,18 @@ limitations under the License.
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cobra"
-	"os"
-	"errors"
-	"strings"
-	"github.com/tendermint/tmlibs/bech32"
 	"github.com/spf13/viper"
+	"github.com/tendermint/tmlibs/bech32"
+	"os"
+	"strings"
 )
 
 var cfgFile string
 var chainPrefix string
-
 
 // AccAddressFromBech32 creates an AccAddress from a Bech32 string.
 func AccAddressFromBech32(address string, prefix string) (addr types.AccAddress, err error) {
@@ -66,17 +65,16 @@ func String(aa types.AccAddress, prefix string) string {
 var rootCmd = &cobra.Command{
 	Use:   "addr-converter",
 	Short: "Convert a cosmos address to another tendermint chain",
-	Args: cobra.MinimumNArgs(1),
+	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 
-		cosmosAddr := args[0];
+		cosmosAddr := args[0]
 		prefix, _ := cmd.Flags().GetString("chain-prefix")
 		addrBz, _ := AccAddressFromBech32(cosmosAddr, "cosmos")
 		osmoAddr := String(addrBz, prefix)
 		fmt.Println(osmoAddr)
 	},
 }
-
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
